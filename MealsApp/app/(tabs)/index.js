@@ -1,5 +1,7 @@
 import { FlatList } from "react-native";
 import { useRouter } from "expo-router";
+import 'react-native-gesture-handler';
+
 
 import CategoryGridTile from "../../components/CategoryGridTile";
 import { CATEGORIES } from "../../data/dummy-data";

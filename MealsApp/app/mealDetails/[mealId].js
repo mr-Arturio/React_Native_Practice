@@ -1,22 +1,42 @@
-import { useLayoutEffect } from "react";
-import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
+import { useLayoutEffect, useCallback } from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 
 import List from "../../components/MealDetail/List";
 import Subtitle from "../../components/MealDetail/Subtitle";
 import MealDetails from "../../components/MealDetails";
 import { MEALS } from "../../data/dummy-data";
+import IconButton from "../../components/IconButton";
 
 export default function MealDetailScreen() {
   const { mealId } = useLocalSearchParams();
   const selectedMeal = MEALS.find((m) => m.id === mealId);
   const navigation = useNavigation();
 
+  const headerButtonPressHandler = useCallback(() => {
+    console.log("Header button tapped!");
+  }, []);
+
   useLayoutEffect(() => {
     if (selectedMeal) {
-      navigation.setOptions({ title: selectedMeal.title });
+      navigation.setOptions({
+        title: selectedMeal.title,
+        headerRight: () => (
+          <IconButton
+            icon="star"
+            color="white"
+            onPress={headerButtonPressHandler}
+          />
+        ),
+      });
     }
-  }, [selectedMeal]);
+  }, [navigation, selectedMeal, headerButtonPressHandler]);
 
   if (!selectedMeal) {
     return <Text>Meal not found</Text>;

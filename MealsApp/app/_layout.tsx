@@ -35,10 +35,10 @@ export default function RootLayout() {
           options={{ title: "All Meals Categories" }}
         />
         <Stack.Screen name="meals/[categoryId]" />
-        <Stack.Screen name="mealdetails/[mealId]" />
+        <Stack.Screen name="mealDetails/[mealId]" />
         <Stack.Screen name="+not-found" />
       </Stack>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
     </ThemeProvider>
   );
 }
