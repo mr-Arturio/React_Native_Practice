@@ -1,11 +1,5 @@
-import { useLayoutEffect, useCallback } from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import React, { useLayoutEffect, useContext } from "react";
+import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 
 import List from "../../components/MealDetail/List";
@@ -13,15 +7,25 @@ import Subtitle from "../../components/MealDetail/Subtitle";
 import MealDetails from "../../components/MealDetails";
 import { MEALS } from "../../data/dummy-data";
 import IconButton from "../../components/IconButton";
+import { FavoritesContext } from "../store/context/favorites-context";
 
 export default function MealDetailScreen() {
+  const favoriteMealsCtx = useContext(FavoritesContext);
+
   const { mealId } = useLocalSearchParams();
-  const selectedMeal = MEALS.find((m) => m.id === mealId);
   const navigation = useNavigation();
 
-  const headerButtonPressHandler = useCallback(() => {
-    console.log("Header button tapped!");
-  }, []);
+  const selectedMeal = MEALS.find((meal) => meal.id === mealId);
+
+  const mealIsFavorite = favoriteMealsCtx.ids.includes(mealId);
+
+  const changeFavoriteStatusHandler = () => {
+    if (mealIsFavorite) {
+      favoriteMealsCtx.removeFavorite(mealId);
+    } else {
+      favoriteMealsCtx.addFavorite(mealId);
+    }
+  };
 
   useLayoutEffect(() => {
     if (selectedMeal) {
@@ -29,14 +33,14 @@ export default function MealDetailScreen() {
         title: selectedMeal.title,
         headerRight: () => (
           <IconButton
-            icon="star"
+            icon={mealIsFavorite ? "star" : "star-outline"}
             color="white"
-            onPress={headerButtonPressHandler}
+            onPress={changeFavoriteStatusHandler}
           />
         ),
       });
     }
-  }, [navigation, selectedMeal, headerButtonPressHandler]);
+  }, [navigation, selectedMeal, mealIsFavorite, changeFavoriteStatusHandler]);
 
   if (!selectedMeal) {
     return <Text>Meal not found</Text>;

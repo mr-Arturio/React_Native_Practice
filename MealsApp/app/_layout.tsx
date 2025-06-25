@@ -9,6 +9,7 @@ import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
+import FavoritesContextProvider from '../app/store/context/favorites-context'
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -23,6 +24,7 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <FavoritesContextProvider>
       <Stack
         screenOptions={{
           headerStyle: { backgroundColor: "#351401" },
@@ -39,6 +41,7 @@ export default function RootLayout() {
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="light" />
+      </FavoritesContextProvider>
     </ThemeProvider>
   );
 }
